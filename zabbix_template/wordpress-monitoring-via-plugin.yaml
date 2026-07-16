@@ -1,0 +1,505 @@
+zabbix_export:
+  version: "7.4"
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+    - uuid: 6dd186f838ac4a0d9ce07e8c43013e4e
+      name: Templates/Applications/Wordpress
+  templates:
+    - uuid: 51f6e6b299d84c339da957a7089fc112
+      template: "Wordpress monitoring via plugin"
+      name: "Wordpress monitoring via plugin"
+      description: "This is for monitoring Wordpress via plugin wordpress-zabbix-data"
+      vendor:
+        name: moesgaardsdk
+        version: 7.0-0
+      groups:
+        - name: Templates/Applications
+        - name: Templates/Applications/Wordpress
+      items:
+        - uuid: 090945367fa14558811cd2465531d8e9
+          name: "{$WEBSITE} Monitoring"
+          type: HTTP_AGENT
+          key: "monitor.wp[{$WEBSITE}]"
+          history: "0"
+          value_type: TEXT
+          description: |
+            Get informartion from the Wordpress plugin.
+            This is using dependent items to display data obtained
+          url: "{$WEBSITE_PROTOCOL}{$WEBSITE}/wp-json/zabbix/v1/stats"
+          headers:
+            - name: X-Zabbix-Token
+              value: "{$WORDPRESS_TOKEN}"
+          tags:
+            - tag: component
+              value: Wordpress
+        - uuid: f1e28400dd1e4fbbacd3c84037a61288
+          name: "Autoload size"
+          type: DEPENDENT
+          key: wp.autoload_size_b
+          units: b
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.autoload_size_b
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 3d78bd25d881467999e6af470fd136bd
+          name: "CPU load 1 min"
+          type: DEPENDENT
+          key: wp.cpu_load_1min
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.cpu_load_1min
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 443ad55a0bb04d14ae1f4a089b25034f
+          name: "CPU load 5 min"
+          type: DEPENDENT
+          key: wp.cpu_load_5min
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.cpu_load_5min
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 79174e80fd284d409c2703c1df807d76
+          name: "CPU load 15 min"
+          type: DEPENDENT
+          key: wp.cpu_load_15min
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.cpu_load_15min
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 9e57c3b49af94adea18067ff55d67524
+          name: "Cron jammed"
+          type: DEPENDENT
+          key: wp.cron_is_jammed
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.cron_is_jammed
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: aa031989270f4743bfe36b076fe19918
+          name: "Database overhead"
+          type: DEPENDENT
+          key: wp.database_overhead_b
+          units: b
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.database_overhead_b
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: cb275a776a4e4b50b6984f1a5bef3503
+          name: "Database size"
+          type: DEPENDENT
+          key: wp.database_size_b
+          units: b
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.database_size_b
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: c8279e16e93b4cbd97c71c41e467f9cc
+          name: "Expired transients count"
+          type: DEPENDENT
+          key: wp.expired_transients_count
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.expired_transients_count
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 0872b8473043489fa6f052a9b7c4ba0c
+          name: "Php memory limit"
+          type: DEPENDENT
+          key: wp.memory_limit
+          units: b
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.memory_limit_bits
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: language
+              value: Php
+            - tag: System
+              value: Wordpress
+        - uuid: 1d9b861c093f4ef9944d11acb7947918
+          name: "Memory peak"
+          type: DEPENDENT
+          key: wp.memory_peak_b
+          units: b
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.memory_peak_b
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 52e1bf7e0a474c25b01ea7cb421e06d2
+          name: "Php Version"
+          type: DEPENDENT
+          key: wp.php.version
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.php_version
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: language
+              value: Php
+            - tag: System
+              value: Wordpress
+        - uuid: 360f62f82a274c378b2f94c38379339f
+          name: "Recent errors count"
+          type: DEPENDENT
+          key: wp.recent_errors_count
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.recent_errors_count
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 5d9c1eaa34e04fe0b04525423953455b
+          name: "Website status"
+          type: DEPENDENT
+          key: wp.status
+          valuemap:
+            name: "Website status"
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.status
+              error_handler: CUSTOM_VALUE
+              error_handler_params: "0"
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+          triggers:
+            - uuid: 5739cdd446e540c89318c41a259b6d54
+              expression: "nodata(/Wordpress monitoring via plugin/wp.status,10m)=0"
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: "nodata(/Wordpress monitoring via plugin/wp.status,10m)=1"
+              name: "{$WEBSITE} Monitoring failed"
+              priority: DISASTER
+        - uuid: adc16540e1344f1f854bed16ab0851f7
+          name: "Unique visitors 30 days"
+          type: DEPENDENT
+          key: wp.unique_visitors_30_days
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.unique_visitors_30_days
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 8ed5fb1e9c094812ac261e4c80c8dbb9
+          name: "Unique visitors today"
+          type: DEPENDENT
+          key: wp.unique_visitors_today
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.unique_visitors_today
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 220c6d94cf774d01948805cbd6e60430
+          name: "Wordpress Version"
+          type: DEPENDENT
+          key: wp.version
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.wp_version
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Wordpress
+        - uuid: 9998b89d9c4a4b609ba3ff55ab6d169c
+          name: "Woocommerce Active Orders"
+          type: DEPENDENT
+          key: wp.woocommerce_active
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.woocommerce_active
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Woocommerce
+        - uuid: b3440fc6dacd4b5595896ba5c68d4566
+          name: "Woocommerce failed Orders 24H"
+          type: DEPENDENT
+          key: wp.woocommerce_failed_orders_24h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.woocommerce_failed_orders_24h
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Woocommerce
+        - uuid: 6252d6c904eb403882bd554160eb80ca
+          name: "Woocommerce pending Orders 24H"
+          type: DEPENDENT
+          key: wp.woocommerce_pending_orders_24h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.metrics.woocommerce_pending_orders_24h
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - "3600"
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          tags:
+            - tag: component
+              value: Wordpress
+            - tag: System
+              value: Woocommerce
+      discovery_rules:
+        - uuid: a7807baccc2e4ee0b9bc1e4bb9292fe3
+          name: "{HOST.NAME} Monitoring"
+          type: DEPENDENT
+          key: wordpress.monitor
+          enabled_lifetime_type: DISABLE_AFTER
+          enabled_lifetime: 1h
+          item_prototypes:
+            - uuid: 69a2fce035da4403ac2b50ab16dfdec3
+              name: "{#PLUGIN_NAME}"
+              type: DEPENDENT
+              key: "wp.plugin[{#PLUGIN_NAME}]"
+              value_type: CHAR
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.metrics.plugins["{#PLUGIN_NAME}"]'
+                - type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - "3600"
+              master_item:
+                key: "monitor.wp[{$WEBSITE}]"
+              tags:
+                - tag: component
+                  value: Wordpress
+                - tag: Type
+                  value: Plug-in
+          master_item:
+            key: "monitor.wp[{$WEBSITE}]"
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.plugins_discovery
+      macros:
+        - macro: "{$WEBSITE}"
+        - macro: "{$WEBSITE_PROTOCOL}"
+          value: "https://"
+        - macro: "{$WORDPRESS_CPU_LOAD_1M_AVG}"
+        - macro: "{$WORDPRESS_CPU_LOAD_1M_DIST}"
+        - macro: "{$WORDPRESS_CPU_LOAD_1M_HIGH}"
+        - macro: "{$WORDPRESS_CPU_LOAD_1M_WARN}"
+        - macro: "{$WORDPRESS_CPU_LOAD_5M_AVG}"
+        - macro: "{$WORDPRESS_CPU_LOAD_5M_DIST}"
+        - macro: "{$WORDPRESS_CPU_LOAD_5M_HIGH}"
+        - macro: "{$WORDPRESS_CPU_LOAD_5M_WARN}"
+        - macro: "{$WORDPRESS_CPU_LOAD_15M_AVG}"
+        - macro: "{$WORDPRESS_CPU_LOAD_15M_DIST}"
+        - macro: "{$WORDPRESS_CPU_LOAD_15M_HIGH}"
+        - macro: "{$WORDPRESS_CPU_LOAD_15M_WARN}"
+        - macro: "{$WORDPRESS_CRON_JAMMED}"
+        - macro: "{$WORDPRESS_RESENT_ERROR_COUNT}"
+        - macro: "{$WORDPRESS_TOKEN}"
+      valuemaps:
+        - uuid: 52842f0cad0d4b5192eea4925d095e9f
+          name: "Website status"
+          mappings:
+            - value: "1"
+              newvalue: Healthy
+            - value: "0"
+              newvalue: Failure
+  graphs:
+    - uuid: 756747abee414559bf6bc756762fe452
+      name: "CPU load"
+      yaxismax: "0"
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: "Wordpress monitoring via plugin"
+            key: wp.cpu_load_1min
+        - sortorder: "1"
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: "Wordpress monitoring via plugin"
+            key: wp.cpu_load_5min
+        - sortorder: "2"
+          color: 2774A4
+          calc_fnc: ALL
+          item:
+            host: "Wordpress monitoring via plugin"
+            key: wp.cpu_load_15min
+    - uuid: 2f07503f3e4b44cfb01d5beb01481fa7
+      name: "Memory peak vs limit"
+      yaxismax: "0"
+      ymin_type_1: FIXED
+      ymax_type_1: ITEM
+      ymax_item_1:
+        host: "Wordpress monitoring via plugin"
+        key: wp.memory_limit
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: "Wordpress monitoring via plugin"
+            key: wp.memory_peak_b
+        - sortorder: "1"
+          drawtype: DASHED_LINE
+          color: F63100
+          calc_fnc: MAX
+          item:
+            host: "Wordpress monitoring via plugin"
+            key: wp.memory_limit
